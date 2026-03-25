@@ -1,0 +1,39 @@
+{
+  "name": "cryptozombies-boilerplate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:verbose": "hardhat test --verbose",
+    "coverage": "hardhat coverage",
+    "node": "hardhat node",
+    "deploy": "hardhat run scripts/deploy.ts",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "setup": "hardhat run scripts/setup.ts",
+    "verify": "hardhat run scripts/verify.ts",
+    "interact": "hardhat run scripts/interact.ts",
+    "clean": "hardhat clean",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlucardTeaching/cryptozombies-boilerplate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.6.1"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.5.0",
+    "hardhat": "^2.28.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
