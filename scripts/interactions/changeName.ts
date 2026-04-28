@@ -1,5 +1,16 @@
 import { ethers } from "hardhat";
 import { ZombieOwnership } from "../../typechain-types";
+import * as fs from "fs";
+import * as path from "path";
+
+function getDeployedAddress(): string {
+  const filePath = path.join(__dirname, "../../deployed-address.json");
+  if (fs.existsSync(filePath)) {
+    const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    if (data.ZombieOwnership) return data.ZombieOwnership;
+  }
+  return "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // fallback
+}
 
 /**
  * Script pentru schimbarea numelui unui zombie
@@ -11,7 +22,7 @@ import { ZombieOwnership } from "../../typechain-types";
  */
 
 async function main() {
-  const contractAddress = process.env.CONTRACT_ADDRESS || "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const contractAddress = process.env.CONTRACT_ADDRESS || getDeployedAddress();
   const zombieIdStr = process.env.ZOMBIE_ID;
   const newName = process.env.ZOMBIE_NAME;
 

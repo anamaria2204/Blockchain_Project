@@ -1,5 +1,16 @@
 import { ethers } from "hardhat";
 import { ZombieOwnership } from "../../typechain-types";
+import * as fs from "fs";
+import * as path from "path";
+
+function getDeployedAddress(): string {
+  const filePath = path.join(__dirname, "../../deployed-address.json");
+  if (fs.existsSync(filePath)) {
+    const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    if (data.ZombieOwnership) return data.ZombieOwnership;
+  }
+  return "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // fallback
+}
 
 /**
  * Script pentru crearea unui zombie nou
@@ -13,7 +24,7 @@ import { ZombieOwnership } from "../../typechain-types";
 
 async function main() {
   // Adresa contractului (default sau din environment variable)
-  const contractAddress = process.env.CONTRACT_ADDRESS || "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const contractAddress = process.env.CONTRACT_ADDRESS || getDeployedAddress();
   const zombieName = process.env.ZOMBIE_NAME;
 
   if (!zombieName) {
@@ -27,13 +38,16 @@ async function main() {
   console.log("Contract address:", contractAddress);
   console.log("Zombie name:", zombieName);
 
-  const [owner] = await ethers.getSigners();
-  console.log("Using account:", owner.address);
+  const signers = await ethers.getSigners();
+  const signerIndex = parseInt(process.env.SIGNER_INDEX || "0");
+  const owner = signers[signerIndex];
+  console.log("Using account:", owner.address, signerIndex > 0 ? `(signer index ${signerIndex})` : "");
 
   // Conectează la contract
   const contract = await ethers.getContractAt(
     "ZombieOwnership",
-    contractAddress
+    contractAddress,
+    owner
   ) as unknown as ZombieOwnership;
 
   // Verifică dacă user-ul are deja un zombie

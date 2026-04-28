@@ -1,4 +1,6 @@
 import { ethers } from "hardhat";
+import * as fs from "fs";
+import * as path from "path";
 
 async function main() {
   console.log("Starting CryptoZombies deployment...\n");
@@ -19,6 +21,12 @@ async function main() {
   const contractAddress = await zombieOwnership.getAddress();
 
   console.log("✓ ZombieOwnership deployed to:", contractAddress);
+
+  // Save address to file so interact scripts can read it automatically
+  const deployedPath = path.join(__dirname, "../deployed-address.json");
+  fs.writeFileSync(deployedPath, JSON.stringify({ ZombieOwnership: contractAddress }, null, 2));
+  console.log("✓ Address saved to deployed-address.json");
+
   console.log("\n" + "=".repeat(60));
   console.log("Deployment Summary");
   console.log("=".repeat(60));
